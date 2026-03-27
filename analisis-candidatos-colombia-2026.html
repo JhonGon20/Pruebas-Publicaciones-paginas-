@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Programático · Colombia 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =================================================================
+   EDELMAN × COLOMBIA 2026
+   Fonts : Inter Tight · DM Serif Display · IBM Plex Mono
+   Rule  : White body everywhere · Hero + Footer = Dark Blue #04004E
+   Single light theme — no dark mode toggle
+================================================================= */
+:root {
+  --e-dark:  #04004E;
+  --e-trust: #041CFF;
+  --e-lightb:#0D75FF;
+  --e-sea:   #2FE0CB;
+  --e-lead:  #0D0D0D;
+
+  /* Page tokens — always light */
+  --bg:     #FFFFFF;
+  --surface:#F7F7F7;
+  --card:   #FFFFFF;
+  --nav-bg: rgba(255,255,255,.97);
+  --bd:     rgba(4,0,78,.10);
+  --bd-h:   rgba(4,28,255,.30);
+  --tx:     #0D0D0D;
+  --muted:  #4a4a6a;
+  --accent: #041CFF;
+  --sh:     rgba(4,0,78,.04);
+
+  /* Candidate chart colours — Edelman palette */
+  --cepeda:    #0D75FF;  --cepeda-light:    rgba(13,117,255,.10);
+  --espriella: #2FE0CB;  --espriella-light: rgba(47,224,203,.10);
+  --paloma:    #7C5CBF;  --paloma-light:    rgba(124,92,191,.10);
+  --fajardo:   #059669;  --fajardo-light:   rgba(5,150,105,.10);
+  --claudia:   #16a34a;  --claudia-light:   rgba(22,163,74,.10);
+  --p1:#0D75FF;--p2:#2FE0CB;--p3:#041CFF;--p4:#04004E;--p5:#7C5CBF;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body {
+  background:#FFFFFF;
+  color:#0D0D0D;
+  font-family:'Inter Tight',sans-serif;
+  font-size:14.5px;line-height:1.65;min-height:100vh;
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#F7F7F7}
+::-webkit-scrollbar-thumb{background:#041CFF;border-radius:2px}
+
+/* ── NAV — white bg, color brandmark top-left ─────────────────── */
+nav {
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:2px solid #041CFF;
+  display:flex;align-items:center;
+  padding:0 2rem;height:64px;gap:0;
+}
+.nav-brand {
+  display:flex;align-items:center;gap:0;
+  margin-right:auto;flex-shrink:0;
+}
+.nav-brand-logo {
+  height:28px;width:auto;display:block;object-fit:contain;
+}
+.nav-brand-sep {
+  width:1px;height:22px;background:rgba(4,0,78,.12);margin:0 16px;flex-shrink:0;
+}
+.nav-brand-label {
+  font-family:'IBM Plex Mono',monospace;font-size:8.5px;
+  letter-spacing:.18em;text-transform:uppercase;color:#4a4a6a;white-space:nowrap;
+}
+/* Nav tabs — boxed, selected = Trust Blue bg + white text */
+.nav-tabs{display:flex;gap:4px;flex-wrap:nowrap}
+.nav-tab {
+  padding:6px 13px;border-radius:3px;
+  border:1.5px solid rgba(4,0,78,.12);
+  font-size:11.5px;font-weight:600;cursor:pointer;
+  background:transparent;color:#4a4a6a;
+  font-family:'Inter Tight',sans-serif;letter-spacing:.01em;
+  transition:all .18s;white-space:nowrap;
+}
+.nav-tab:hover{border-color:#041CFF;color:#041CFF}
+.nav-tab.active{background:#041CFF;border-color:#041CFF;color:#FFFFFF;font-weight:700}
+
+/* Hide theme toggle — single mode */
+.theme-toggle{display:none}
+
+/* ── VIEWS ─────────────────────────────────────────────────────── */
+.view{display:none;animation:fadeUp .3s ease}.view.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── HERO — Dark Blue #04004E ─────────────────────────────────── */
+.hero {
+  background:#FFFFFF;
+  position:relative;overflow:hidden;
+  padding:80px 2rem 64px;
+}
+.hero::before{display:none}
+.hero::after{display:none}
+.hero-inner{max-width:1280px;margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow {
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;color:#041CFF;margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::after{content:'';height:1px;width:100px;background:rgba(4,28,255,.2);flex-shrink:0}
+.hero h1 {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(3rem,6vw,5rem);font-weight:400;
+  line-height:1.05;color:#0D0D0D;letter-spacing:-.025em;margin-bottom:20px;
+}
+.hero h1 em{font-style:italic;color:#041CFF}
+.hero-sub {
+  font-size:15px;font-weight:300;line-height:1.75;
+  color:#4a4a6a;max-width:600px;margin-bottom:48px;
+}
+
+/* ── CHIPS ─────────────────────────────────────────────────────── */
+.candidate-chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip {
+  display:flex;align-items:center;gap:8px;padding:7px 15px;border-radius:3px;
+  border:1px solid rgba(4,0,78,.14);
+  background:transparent;color:#0D0D0D;
+  font-size:12px;font-weight:500;cursor:pointer;
+  transition:all .2s;font-family:'Inter Tight',sans-serif;
+}
+.chip:hover{background:rgba(4,28,255,.06);border-color:#041CFF;color:#041CFF}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* ── PAGE BODY ─────────────────────────────────────────────────── */
+.body-wrap{max-width:1280px;margin:0 auto;padding:52px 2rem 80px;background:#FFFFFF}
+
+/* ── SECTION LABELS ────────────────────────────────────────────── */
+.section-title {
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:#4a4a6a;margin-bottom:24px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::before{content:'';width:3px;height:14px;background:#041CFF;border-radius:1px;flex-shrink:0}
+
+/* ── PILLAR TABS — boxed, selected = Trust Blue ─────────────────── */
+.pillar-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.pillar-tab {
+  padding:6px 15px;border-radius:3px;
+  border:1.5px solid rgba(4,0,78,.12);
+  background:transparent;color:#4a4a6a;
+  cursor:pointer;font-size:12px;font-weight:500;
+  font-family:'Inter Tight',sans-serif;letter-spacing:.01em;
+  display:flex;align-items:center;gap:6px;transition:all .18s;
+}
+.pillar-tab .dot{width:5px;height:5px;border-radius:50%}
+.pillar-tab.active{background:#041CFF;color:#fff;border-color:#041CFF;font-weight:700}
+.pillar-tab:hover:not(.active){border-color:#041CFF;color:#041CFF}
+
+/* ── COMPARE GRID ──────────────────────────────────────────────── */
+.compare-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:36px}
+@media(max-width:1100px){.compare-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.compare-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:#FFFFFF;border-radius:3px;padding:18px;border:1.5px solid rgba(4,0,78,.10);display:none;transition:border-color .2s}
+.compare-card.visible{display:block}
+.compare-card:hover{border-color:#041CFF}
+.compare-card-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(4,0,78,.10)}
+.cand-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cand-name{font-weight:700;font-size:11.5px;color:#0D0D0D;font-family:'Inter Tight',sans-serif}
+.cand-tag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 7px;border-radius:2px;letter-spacing:.06em;text-transform:uppercase}
+.pillar-content{display:none}.pillar-content.active{display:block}
+.content-label{font-family:'IBM Plex Mono',monospace;font-size:8.5px;text-transform:uppercase;letter-spacing:.14em;color:#4a4a6a;margin-bottom:4px;margin-top:10px}
+.content-label:first-child{margin-top:0}
+.content-text{font-size:12px;color:#0D0D0D;line-height:1.6}
+.content-text ul{padding-left:13px}.content-text li{margin-bottom:3px}
+.precision-badge{display:inline-flex;align-items:center;gap:4px;margin-top:11px;padding:3px 8px;border-radius:2px;font-size:8.5px;font-weight:700;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em}
+.precision-alto{background:rgba(47,224,203,.18);color:#0aaa96}
+.precision-medio{background:rgba(13,117,255,.12);color:#0D75FF}
+.precision-bajo{background:rgba(4,0,78,.08);color:#4a4a6a}
+
+/* ── RADAR — thick 14px bars + labels + percentages ─────────────── */
+.radar-wrap{margin:24px 0}
+.radar-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}
+.radar-label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#4a4a6a;width:130px;flex-shrink:0;text-align:right;padding-top:3px}
+.radar-bars{flex:1;display:flex;flex-direction:column;gap:6px}
+.radar-bar-row{display:flex;align-items:center;gap:7px}
+.radar-cand-label{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#4a4a6a;width:68px;flex-shrink:0;text-align:right}
+.radar-bar{height:14px;border-radius:2px;transition:width .5s ease;flex-shrink:0;min-width:4px}
+.radar-pct{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;color:#0D0D0D;white-space:nowrap;min-width:34px}
+.radar-bar.cepeda   {background:#0D75FF}
+.radar-bar.espriella{background:#2FE0CB}
+.radar-bar.paloma   {background:#7C5CBF}
+.radar-bar.fajardo  {background:#059669}
+.radar-bar.claudia  {background:#16a34a}
+.radar-legend{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.radar-leg-item{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#4a4a6a}
+.radar-leg-dot{width:10px;height:10px;border-radius:2px}
+
+/* ── ALERTS ────────────────────────────────────────────────────── */
+.alerts-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:36px}
+@media(max-width:1100px){.alerts-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.alerts-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.alerts-grid{grid-template-columns:1fr}}
+.alert-card{background:#FFFFFF;border-radius:3px;padding:16px;border:1.5px solid rgba(4,0,78,.10)}
+.alert-card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.alert-cand{font-weight:700;font-size:11.5px;font-family:'Inter Tight',sans-serif}
+.alert-item{display:flex;gap:7px;margin-bottom:6px;font-size:11.5px;color:#4a4a6a;align-items:flex-start}
+
+/* ── CANDIDATE HERO — Dark Blue #04004E ─────────────────────────── */
+.cand-hero {
+  background:#04004E;
+  padding:64px 2rem 48px;
+  position:relative;overflow:hidden;
+}
+.cand-hero::before {
+  content:'';position:absolute;inset:-40px;
+  background-image:linear-gradient(45deg,rgba(255,255,255,.025) 1px,transparent 1px),
+                   linear-gradient(-45deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;
+}
+.cand-hero::after {
+  content:'';position:absolute;right:-80px;top:-80px;
+  width:300px;height:300px;
+  border:1px solid rgba(255,255,255,.06);
+  transform:rotate(45deg);pointer-events:none;
+}
+.cand-hero-inner{max-width:1280px;margin:0 auto;position:relative;z-index:1}
+.cand-badge{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:3px;border:1px solid rgba(255,255,255,.24);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.80);margin-bottom:16px}
+.cand-hero h2{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:400;color:#fff;margin-bottom:10px;line-height:1.08;letter-spacing:-.02em}
+.cand-slogan{font-size:14px;color:rgba(255,255,255,.60);max-width:640px;margin-bottom:20px}
+.cand-meta{display:flex;flex-wrap:wrap;gap:14px}
+.meta-item{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.50);display:flex;align-items:center;gap:5px}
+
+/* ── CANDIDATE BODY — white ─────────────────────────────────────── */
+.cand-body{max-width:1280px;margin:0 auto;padding:40px 2rem 80px;background:#FFFFFF}
+
+/* ── STAT BOXES — boxed, 4 categories ──────────────────────────── */
+.overview-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;
+  border:1.5px solid rgba(4,0,78,.12);
+  border-radius:3px;overflow:hidden;margin-bottom:40px;
+}
+@media(max-width:900px){.overview-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.overview-stats{grid-template-columns:1fr}}
+.stat-box{background:#FFFFFF;display:flex;flex-direction:column;border-right:1px solid rgba(4,0,78,.10)}
+.stat-box:last-child{border-right:none}
+.stat-header{background:rgba(4,0,78,.03);border-bottom:1px solid rgba(4,0,78,.10);padding:9px 16px}
+.stat-cat-num{font-family:'IBM Plex Mono',monospace;font-size:7.5px;text-transform:uppercase;letter-spacing:.22em;color:#041CFF;margin-bottom:2px}
+.stat-cat-name{font-family:'IBM Plex Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.10em;color:#4a4a6a;line-height:1.4}
+.stat-body{padding:20px 16px 22px;flex:1;display:flex;flex-direction:column;gap:5px}
+.stat-val{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;line-height:1.05;letter-spacing:-.02em}
+.stat-lbl{font-size:11px;color:#4a4a6a;line-height:1.55;font-weight:300}
+
+/* ── SECTOR GRID — boxed cards ──────────────────────────────────── */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.sector-card{background:#FFFFFF;border-radius:3px;padding:20px;border:1.5px solid rgba(4,0,78,.10);transition:all .2s}
+.sector-card:hover{border-color:#041CFF;transform:translateY(-2px);box-shadow:0 4px 16px rgba(4,28,255,.07)}
+.sector-card-title{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:13px;color:#0D0D0D;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sector-icon{font-size:15px}
+.sector-items{list-style:none}
+.sector-item{display:flex;gap:8px;margin-bottom:5px;font-size:12px;color:#4a4a6a;line-height:1.55}
+.sector-item::before{content:'→';flex-shrink:0;font-size:10px;color:#041CFF;margin-top:2px}
+.sector-item.highlight{color:#0D0D0D}
+.sector-item.highlight::before{color:#2FE0CB}
+
+.conclusion-box{background:#FFFFFF;border-radius:3px;padding:28px 28px 28px 32px;border:1.5px solid rgba(4,0,78,.10);margin-top:28px;position:relative;overflow:hidden}
+.conclusion-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.conclusion-box h4{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:13.5px;color:#0D0D0D;margin-bottom:10px}
+.conclusion-box p{font-size:13px;color:#4a4a6a;line-height:1.8;font-weight:300}
+
+.h3-section{font-family:'DM Serif Display',serif;font-size:1.45rem;font-weight:400;color:#0D0D0D;letter-spacing:-.015em;margin:42px 0 18px;display:flex;align-items:center;gap:14px}
+.h3-section::after{content:'';flex:1;height:1px;background:rgba(4,0,78,.10);max-width:320px}
+
+/* ── FOOTER — Dark Blue #04004E + Trust Blue border + white logo ── */
+footer {
+  background:#04004E;
+  border-top:3px solid #041CFF;
+  padding:26px 2rem;
+}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.footer-logo-img{height:28px;width:auto;object-fit:contain}
+.footer-sep{width:1px;height:22px;background:rgba(255,255,255,.18);flex-shrink:0}
+.footer-copy{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:rgba(255,255,255,.40);flex:1}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand"><img src="data:image/png;base64,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1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/VR/h0Rf4x4+xzOvjDZg1n30a779+qj/Dvo13379VH+HRF/jHj7HM6+MNmDWffRrvv36qP8O+jXffv1Uf4dEX+MePsczr4w2YNZ99Gu+/fqo/w76Nd9+/V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" class="nav-brand-logo" alt="Edelman"><span class="nav-brand-sep"></span><span class="nav-brand-label">Análisis Programático · Colombia 2026</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="home">Comparativo</button>
+    <button class="nav-tab" data-tab="cepeda">Cepeda</button>
+    <button class="nav-tab" data-tab="espriella">De la Espriella</button>
+    <button class="nav-tab" data-tab="paloma">P. Valencia</button>
+    <button class="nav-tab" data-tab="fajardo">Fajardo</button>
+    <button class="nav-tab" data-tab="claudia">C. López</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════ HOME ══════════════════════ -->
+<div class="view active" id="view-home">
+  <div class="hero"><div class="hero-inner">
+    <div class="hero-eyebrow">Elecciones Presidenciales Colombia 2026 · Análisis Técnico de Programas de Gobierno</div>
+    <div style="display:none">Elecciones Presidenciales 2026 · Análisis técnico de programas</div>
+    <h1>Cinco <em>visiones</em><br>de país</h1>
+    <p class="hero-sub">Análisis técnico y comparado de propuestas programáticas desde la perspectiva de la consultoría en asuntos públicos y gobierno. Metodología neutral y no partidista.</p>
+    <div class="candidate-chips">
+      <div class="chip" data-cand="cepeda" onclick="switchTab('cepeda')"><span class="chip-dot"></span>Iván Cepeda · Pacto Histórico</div>
+      <div class="chip" data-cand="espriella" onclick="switchTab('espriella')"><span class="chip-dot"></span>Abelardo de la Espriella · Firmes por la Patria</div>
+      <div class="chip" data-cand="paloma" onclick="switchTab('paloma')"><span class="chip-dot"></span>Paloma Valencia · Centro Democrático</div>
+      <div class="chip" data-cand="fajardo" onclick="switchTab('fajardo')"><span class="chip-dot"></span>Sergio Fajardo · Centro independiente</div>
+      <div class="chip" data-cand="claudia" onclick="switchTab('claudia')"><span class="chip-dot"></span>Claudia López · Alianza Verde</div>
+    </div>
+
+    <div class="section-title">Nivel de concreción programática comparada por sector</div>
+    <div class="radar-legend">
+      <div class="radar-leg-item"><div class="radar-leg-dot" style="background:var(--cepeda)"></div>Cepeda</div>
+      <div class="radar-leg-item"><div class="radar-leg-dot" style="background:var(--espriella)"></div>De la Espriella</div>
+      <div class="radar-leg-item"><div class="radar-leg-dot" style="background:var(--paloma)"></div>Valencia</div>
+      <div class="radar-leg-item"><div class="radar-leg-dot" style="background:var(--fajardo)"></div>Fajardo</div>
+      <div class="radar-leg-item"><div class="radar-leg-dot" style="background:var(--claudia)"></div>C. López</div>
+    </div>
+    <div class="radar-wrap">
+      <div class="radar-row"><div class="radar-label">Anticorrupción</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:72%"></div><span class="radar-pct">72%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:68%"></div><span class="radar-pct">68%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:50%"></div><span class="radar-pct">50%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:76%"></div><span class="radar-pct">76%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:80%"></div><span class="radar-pct">80%</span></div></div></div>
+      <div class="radar-row"><div class="radar-label">Salud</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:40%"></div><span class="radar-pct">40%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:80%"></div><span class="radar-pct">80%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:44%"></div><span class="radar-pct">44%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:82%"></div><span class="radar-pct">82%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:76%"></div><span class="radar-pct">76%</span></div></div></div>
+      <div class="radar-row"><div class="radar-label">Seguridad</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:55%"></div><span class="radar-pct">55%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:72%"></div><span class="radar-pct">72%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:60%"></div><span class="radar-pct">60%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:78%"></div><span class="radar-pct">78%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:82%"></div><span class="radar-pct">82%</span></div></div></div>
+      <div class="radar-row"><div class="radar-label">Economía</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:45%"></div><span class="radar-pct">45%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:62%"></div><span class="radar-pct">62%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:56%"></div><span class="radar-pct">56%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:80%"></div><span class="radar-pct">80%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:70%"></div><span class="radar-pct">70%</span></div></div></div>
+      <div class="radar-row"><div class="radar-label">Desarrollo Rural</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:75%"></div><span class="radar-pct">75%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:65%"></div><span class="radar-pct">65%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:38%"></div><span class="radar-pct">38%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:78%"></div><span class="radar-pct">78%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:68%"></div><span class="radar-pct">68%</span></div></div></div>
+      <div class="radar-row"><div class="radar-label">Educación</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:48%"></div><span class="radar-pct">48%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:55%"></div><span class="radar-pct">55%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:40%"></div><span class="radar-pct">40%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:88%"></div><span class="radar-pct">88%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:72%"></div><span class="radar-pct">72%</span></div></div></div>
+      <div class="radar-row"><div class="radar-label">Desarrollo Regional</div><div class="radar-bars"><div class="radar-bar-row"><span class="radar-cand-label">Cepeda</span><div class="radar-bar cepeda" style="width:60%"></div><span class="radar-pct">60%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Espriella</span><div class="radar-bar espriella" style="width:50%"></div><span class="radar-pct">50%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Valencia</span><div class="radar-bar paloma" style="width:35%"></div><span class="radar-pct">35%</span></div><div class="radar-bar-row"><span class="radar-cand-label">Fajardo</span><div class="radar-bar fajardo" style="width:70%"></div><span class="radar-pct">70%</span></div><div class="radar-bar-row"><span class="radar-cand-label">C. López</span><div class="radar-bar claudia" style="width:90%"></div><span class="radar-pct">90%</span></div></div></div>
+    </div>
+  </div></div>
+
+  <div class="body-wrap">
+    <div class="section-title">Comparativo por pilares transversales</div>
+    <div class="pillar-tabs">
+      <button class="pillar-tab active" data-pillar="salud"><span class="dot" style="background:var(--p1)"></span>🏥 Salud</button>
+      <button class="pillar-tab" data-pillar="seguridad"><span class="dot" style="background:var(--p3)"></span>🔐 Seguridad</button>
+      <button class="pillar-tab" data-pillar="economia"><span class="dot" style="background:var(--p2)"></span>📈 Economía</button>
+      <button class="pillar-tab" data-pillar="corrupcion"><span class="dot" style="background:var(--p4)"></span>⚖️ Anticorrupción</button>
+      <button class="pillar-tab" data-pillar="rural"><span class="dot" style="background:var(--p5)"></span>🌱 Rural</button>
+    </div>
+
+    <div class="compare-grid">
+      <!-- CEPEDA -->
+      <div class="compare-card visible" style="border-top:3px solid var(--cepeda)">
+        <div class="compare-card-header"><div class="cand-dot" style="background:var(--cepeda)"></div><div class="cand-name">Iván Cepeda</div><div class="cand-tag" style="background:var(--cepeda-light);color:var(--cepeda)">Izquierda</div></div>
+        <div class="pillar-content active" data-pillar="salud">
+          <div class="content-label">Propuestas</div><div class="content-text">Crisis enmarcada en la macrocorrupción. Recuperar recursos saqueados y redirigirlos al sistema. Control social sobre el sector. Sin propuestas específicas sobre UPC ni deuda hospitalaria.</div><span class="precision-badge precision-bajo">● Precisión: Baja</span>
+        </div>
+        <div class="pillar-content" data-pillar="seguridad">
+          <div class="content-label">Propuestas</div><div class="content-text">Seguridad Humana como eje. Sustitución voluntaria de cultivos. Diálogo y negociación. Enfoque territorial diferenciado por regiones.</div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+        <div class="pillar-content" data-pillar="economia">
+          <div class="content-label">Propuestas</div><div class="content-text">Revolución urbana orientada a la vida digna. Austeridad republicana. Salario vital como eje. Sin montos ni metas verificables.</div><span class="precision-badge precision-bajo">● Precisión: Baja</span>
+        </div>
+        <div class="pillar-content" data-pillar="corrupcion">
+          <div class="content-label">Propuesta #1</div><div class="content-text"><ul><li>Sistema Nacional contra la Macrocorrupción.</li><li>Alertas tempranas y movilización ciudadana.</li><li>Recuperación de bienes ilícitos vía SAE.</li><li>Impunidad del 94% como diagnóstico documentado.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="rural">
+          <div class="content-label">Propuestas</div><div class="content-text">Revolución Agraria como propuesta #7. Acceso al agua como eje. Organización del campesinado. Reconocimiento de pueblos indígenas y comunidades afro.</div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+      </div>
+
+      <!-- ESPRIELLA -->
+      <div class="compare-card visible" style="border-top:3px solid var(--espriella)">
+        <div class="compare-card-header"><div class="cand-dot" style="background:var(--espriella)"></div><div class="cand-name">De la Espriella</div><div class="cand-tag" style="background:var(--espriella-light);color:var(--espriella)">Derecha</div></div>
+        <div class="pillar-content active" data-pillar="salud">
+          <div class="content-label">Plan de choque</div><div class="content-text"><ul><li>$4B nóminas y contratos atrasados.</li><li>$1.5B tratamientos crónicos.</li><li>$1.5B deuda proveedores + entrega domiciliaria.</li><li>$3B restaurar UPC.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="seguridad">
+          <div class="content-label">Propuestas</div><div class="content-text">10 cabecillas por región en 90 días. Bioherbicidas contra cultivos ilícitos. Puestos de Mando Unificado. Alianzas con EEUU e Israel.</div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="economia">
+          <div class="content-label">Propuestas</div><div class="content-text">Capitalismo popular: ciudadano-accionista. Hub Gamer LatAm. Exenciones economía digital $400M/año. Créditos al 2% anual.</div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+        <div class="pillar-content" data-pillar="corrupcion">
+          <div class="content-label">Bloque Anticorrupción</div><div class="content-text"><ul><li>Mando presidencial directo.</li><li>UIAF+Policía+Ejército+Fiscalía+Procuraduría.</li><li>Extinción de dominio a testaferros.</li><li>App 'Regalía Firme' control ciudadano.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="rural">
+          <div class="content-label">Las 5 semillas</div><div class="content-text"><ul><li>Mapa Zonificación Agrícola (UPRA).</li><li>Programa SENA en 50 municipios.</li><li>CENI+Agrosavia para I+D.</li><li>Crédito al 8.7% con garantía 80%.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+      </div>
+
+      <!-- PALOMA -->
+      <div class="compare-card visible" style="border-top:3px solid var(--paloma)">
+        <div class="compare-card-header"><div class="cand-dot" style="background:var(--paloma)"></div><div class="cand-name">Paloma Valencia</div><div class="cand-tag" style="background:var(--paloma-light);color:var(--paloma)">Derecha</div></div>
+        <div class="pillar-content active" data-pillar="salud">
+          <div class="content-label">Propuestas</div><div class="content-text">Libertad para elegir asegurador. Hospitales padrinos para regiones apartadas. Mejores ingresos al talento humano. Sin montos ni mecanismos de implementación.</div><span class="precision-badge precision-bajo">● Precisión: Baja</span>
+        </div>
+        <div class="pillar-content" data-pillar="seguridad">
+          <div class="content-label">Las 4R</div><div class="content-text">Reducción ingresos criminales · Robustecer FF.MM. (Plan Colombia 2.0) · Reenamorar comunidades · Restablecer legalidad. Sin metas cuantificables ni plazos.</div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+        <div class="pillar-content" data-pillar="economia">
+          <div class="content-label">Propuestas</div><div class="content-text">Crédito popular subsidiado vs. gota a gota. Ahorro pensional desde la cuna. Formalización sin trabas. Subsidios a madres cabeza de hogar.</div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+        <div class="pillar-content" data-pillar="corrupcion">
+          <div class="content-label">Propuestas</div><div class="content-text">Corruptos a la cárcel + extinción de dominio. Recuperación del último peso robado. Menos burocracia. Sin mecanismo institucional concreto.</div><span class="precision-badge precision-bajo">● Precisión: Baja</span>
+        </div>
+        <div class="pillar-content" data-pillar="rural">
+          <div class="content-label">Propuestas</div><div class="content-text">Campo seguro y competitivo. Alianzas público-privadas. Sustitución de cultivos ilícitos. Propuesta muy general sin instrumentos específicos.</div><span class="precision-badge precision-bajo">● Precisión: Baja</span>
+        </div>
+      </div>
+
+      <!-- FAJARDO -->
+      <div class="compare-card visible" style="border-top:3px solid var(--fajardo)">
+        <div class="compare-card-header"><div class="cand-dot" style="background:var(--fajardo)"></div><div class="cand-name">Sergio Fajardo</div><div class="cand-tag" style="background:var(--fajardo-light);color:var(--fajardo)">Centro</div></div>
+        <div class="pillar-content active" data-pillar="salud">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Puesto de Mando Presidencial (100 días).</li><li>Auditorías EPS + recálculo técnico UPC.</li><li>Acuerdo de punto final con hospitales.</li><li>Atención Primaria en Salud como base.</li><li>Salud Digital + Estrategia Nacional Salud Mental.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="seguridad">
+          <div class="content-label">Plan Guardián</div><div class="content-text"><ul><li>+40.000 policías en el cuatrienio.</li><li>Duplicar grupos GAULA.</li><li>5 nuevas cárceles.</li><li>Planes integrales en Catatumbo, Cauca, Chocó.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="economia">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>USD 1.000M en coinversión (Colombia Coinvierte).</li><li>Modernización de 120.000 empresas.</li><li>-50% en tiempos de trámites empresariales.</li><li>10 aceleradoras regionales.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="corrupcion">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Secretaría de Transparencia → Agencia Anticorrupción.</li><li>Tablero de Transparencia periódico.</li><li>30 proyectos de inversión con control especial.</li><li>Ley del lobby + protección a denunciantes.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="rural">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>PDPA: 50% de pequeños productores en cadenas modernas.</li><li>Catastro multipropósito en todo el país.</li><li>Altillanura: nuevo polo agroproductivo.</li><li>Modernización integral de la caficultura.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+      </div>
+
+      <!-- CLAUDIA LÓPEZ -->
+      <div class="compare-card visible" style="border-top:3px solid var(--claudia)">
+        <div class="compare-card-header"><div class="cand-dot" style="background:var(--claudia)"></div><div class="cand-name">Claudia López</div><div class="cand-tag" style="background:var(--claudia-light);color:var(--claudia)">Centro-izq.</div></div>
+        <div class="pillar-content active" data-pillar="salud">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Sistema Mixto e Integral de Salud.</li><li>Nuevo estudio actuarial con planes de beneficios explícitos.</li><li>Salud mental y discapacidad como prioridades.</li><li>Cuidado institucionalizado desde niñez hasta vejez.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="seguridad">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Fiscalía Antimafia dedicada al crimen organizado.</li><li>Justicia en tres niveles (mafias, ordinaria, restaurativa).</li><li>Sometimiento de los 13 grupos armados activos.</li><li>Reforma penitenciaria integral.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="economia">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Descentralización fiscal y autonomía regional.</li><li>Pactos regionales de productividad.</li><li>Impulsar empleabilidad de mujeres, jóvenes y mayores de 50.</li><li>Micronegocios a empresas con empleos formales.</li></ul></div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+        <div class="pillar-content" data-pillar="corrupcion">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Fiscalía Antimafia como eje anticorrupción.</li><li>Capital ilegal incautado reinvertido en regiones.</li><li>Transformar Procuraduría en apoyo a la Fiscalía.</li><li>Presupuestos participativos con votación ciudadana.</li></ul></div><span class="precision-badge precision-alto">● Precisión: Alta</span>
+        </div>
+        <div class="pillar-content" data-pillar="rural">
+          <div class="content-label">Propuestas</div><div class="content-text"><ul><li>Descentralización del poder decisorio a regiones.</li><li>DPR (Delegados Presidenciales Regionales) en territorios.</li><li>Presupuesto participativo regional con votación ciudadana.</li><li>Clausura del centralismo como problema estructural.</li></ul></div><span class="precision-badge precision-medio">● Precisión: Media</span>
+        </div>
+      </div>
+    </div><!-- /compare-grid -->
+
+    <!-- ALERTAS -->
+    <div class="section-title">Alertas analíticas por candidato</div>
+    <div class="alerts-grid">
+      <div class="alert-card" style="border-top:3px solid var(--cepeda)">
+        <div class="alert-card-header"><div class="cand-dot" style="background:var(--cepeda)"></div><div class="alert-cand" style="color:var(--cepeda)">Iván Cepeda</div></div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>+430 págs. con alto componente discursivo y baja concreción operativa.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Ausencias en salud, energía y macroeconomía.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Sin fuentes de financiación explícitas.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Anticorrupción: propuesta #1 más articulada institucionalmente.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Fuerte enfoque diferencial étnico y territorial.</div>
+      </div>
+      <div class="alert-card" style="border-top:3px solid var(--espriella)">
+        <div class="alert-card-header"><div class="cand-dot" style="background:var(--espriella)"></div><div class="alert-cand" style="color:var(--espriella)">De la Espriella</div></div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>$10B en salud sin análisis de sostenibilidad fiscal.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Fracking en 90 días: obstáculos legales y ambientales.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Ausencias en educación básica y saneamiento.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Mayor concreción sectorial del grupo.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Metas cuantificables y plazos en salud, seguridad, energía.</div>
+      </div>
+      <div class="alert-card" style="border-top:3px solid var(--paloma)">
+        <div class="alert-card-header"><div class="cand-dot" style="background:var(--paloma)"></div><div class="alert-cand" style="color:var(--paloma)">Paloma Valencia</div></div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Propuestas aspiracionales sin mecanismos ni montos.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Ausencias: energía, ambiente, etnias, política exterior.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Las 4R sin indicadores verificables.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Síntesis clara y alta comunicabilidad ciudadana.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Coherencia ideológica entre propuestas y modelo de Estado.</div>
+      </div>
+      <div class="alert-card" style="border-top:3px solid var(--fajardo)">
+        <div class="alert-card-header"><div class="cand-dot" style="background:var(--fajardo)"></div><div class="alert-cand" style="color:var(--fajardo)">Sergio Fajardo</div></div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Alta densidad puede dificultar la priorización.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Sin fuentes de financiación de los grandes programas.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Tensión entre consolidación fiscal y agenda social amplia.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Programa más completo: cubre todos los sectores.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Alta concreción en educación, energía, seguridad y salud.</div>
+      </div>
+      <div class="alert-card" style="border-top:3px solid var(--claudia)">
+        <div class="alert-card-header"><div class="cand-dot" style="background:var(--claudia)"></div><div class="alert-cand" style="color:var(--claudia)">Claudia López</div></div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>La descentralización radical requiere reforma constitucional no desarrollada.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Sin montos de inversión en la mayoría de propuestas.</div>
+        <div class="alert-item"><span class="alert-icon">⚠️</span>Los DPR (Delegados Presidenciales) son una figura nueva sin marco legal.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>La descentralización fiscal es la propuesta diferencial más articulada.</div>
+        <div class="alert-item"><span class="alert-icon">✅</span>Seguridad y anticorrupción tienen los mecanismos más específicos del conjunto.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ CEPEDA ══════════════════════ -->
+<div class="view" id="view-cepeda">
+  <div class="cand-hero"><div class="cand-hero-inner">
+    <div class="cand-badge" style="border-color:var(--cepeda);color:var(--cepeda)"><div class="cand-dot" style="background:var(--cepeda)"></div>Pacto Histórico · Izquierda progresista</div>
+    <h2>Iván Cepeda Castro</h2>
+    <p class="cand-slogan">"El Poder de la Verdad" · Segunda etapa del cambio histórico · Programa 2026–2030</p>
+    <div class="cand-meta"><div class="meta-item">📄 +430 páginas</div><div class="meta-item">🎯 Cuatro revoluciones: ética, social, territorial, democrática</div><div class="meta-item">📊 Concreción general: Media-Baja</div></div>
+  </div></div>
+  <div class="cand-body">
+    <div class="overview-stats">
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">01</div><div class="stat-cat-name">Cobertura y arquitectura programática</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--cepeda)">4</div><div class="stat-lbl">Ejes revolucionarios estructurantes del programa</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">02</div><div class="stat-cat-name">Orientación del programa</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--cepeda);font-size:1.4rem">Transformador</div><div class="stat-lbl">Progresista de izquierda · Paz negociada · Justicia social estructural</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">03</div><div class="stat-cat-name">Concreción en economía y salud</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--cepeda)">Baja</div><div class="stat-lbl">Sin montos, metas verificables ni fuentes de financiación</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">04</div><div class="stat-cat-name">Sector más robusto en propuestas</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--cepeda);font-size:1.3rem">Anticorrupción</div><div class="stat-lbl">Sistema Nacional contra la Macrocorrupción · Impunidad 94%</div></div>
+      </div>
+    </div>
+    <h3 class="h3-section">Estructura programática reconstruida</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">⚖️</span>Anticorrupción (Eje central)</div><ul class="sector-items"><li class="sector-item highlight">Sistema Nacional contra la Macrocorrupción como propuesta #1</li><li class="sector-item highlight">Impunidad 94% en 2024 — diagnóstico documentado</li><li class="sector-item">Alertas tempranas para prevención</li><li class="sector-item">Recuperación de bienes ilícitos vía SAE</li><li class="sector-item">Movilización ciudadana como pilar anticorrupción</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌱</span>Revolución Agraria</div><ul class="sector-items"><li class="sector-item highlight">Revolución Agraria como propuesta #7 del programa</li><li class="sector-item">Acceso al agua como eje estructurante</li><li class="sector-item">Organización y movilización del campesinado</li><li class="sector-item">Reforma agraria inconclusa como deuda histórica</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🕊️</span>Paz y Seguridad Humana</div><ul class="sector-items"><li class="sector-item highlight">Seguridad Humana como componente esencial</li><li class="sector-item">Sustitución voluntaria de cultivos (Putumayo)</li><li class="sector-item">Diálogo y negociación como instrumentos centrales</li><li class="sector-item">Enfoque territorial diferenciado por regiones</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌍</span>Política Exterior</div><ul class="sector-items"><li class="sector-item highlight">Política exterior de paz, autónoma y solidaria</li><li class="sector-item">Protección a migrantes colombianos en el exterior</li><li class="sector-item">Integración regional por sobre mandatos externos</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏙️</span>Desarrollo Urbano y Social</div><ul class="sector-items"><li class="sector-item highlight">Política de igualdad sustantiva en territorios urbanos</li><li class="sector-item">Revolución urbana orientada a la vida digna</li><li class="sector-item">Salario vital como eje de protección</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌺</span>Enfoque Diferencial</div><ul class="sector-items"><li class="sector-item highlight">Reconocimiento de pueblos indígenas (Wiwa, Kankuamo)</li><li class="sector-item highlight">Rebelión antirracista (Tumaco, Buenaventura)</li><li class="sector-item">Protagonismo de mujeres en las tres revoluciones</li><li class="sector-item">Justicia ambiental y derechos de los animales</li></ul></div>
+    </div>
+    <div class="conclusion-box" style="border-left:4px solid var(--cepeda)"><h4>Conclusión analítica</h4><p>El programa de Cepeda es el más extenso y discursivo del conjunto. Su orientación es progresista-transformadora con énfasis en justicia social, memoria histórica y paz negociada. La anticorrupción es su propuesta más articulada institucionalmente. Sin embargo, la mayoría de sectores carecen de concreción operativa, metas verificables y fuentes de financiación explícitas. Alta densidad narrativa con bajo nivel de traducción a política pública ejecutable.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ ESPRIELLA ══════════════════════ -->
+<div class="view" id="view-espriella">
+  <div class="cand-hero"><div class="cand-hero-inner">
+    <div class="cand-badge" style="border-color:var(--espriella);color:var(--espriella)"><div class="cand-dot" style="background:var(--espriella)"></div>Firmes por la Patria · Derecha</div>
+    <h2>Abelardo de la Espriella</h2>
+    <p class="cand-slogan">"Firmes por la Patria" · El Milagro colombiano · Propuestas 2026–2030</p>
+    <div class="cand-meta"><div class="meta-item">🎯 Plan de choque + capitalismo popular</div><div class="meta-item">📊 Concreción general: Alta</div></div>
+  </div></div>
+  <div class="cand-body">
+    <div class="overview-stats">
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">01</div><div class="stat-cat-name">Cobertura y arquitectura programática</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--espriella)">8</div><div class="stat-lbl">Milagros sectoriales: salud, campo, seguridad, energía, anticorrupción, juventud, mujer, energía</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">02</div><div class="stat-cat-name">Orientación del programa</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--espriella);font-size:1.3rem">Conservador-popular</div><div class="stat-lbl">Derecha con énfasis en autoridad, emprendimiento y capitalismo popular</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">03</div><div class="stat-cat-name">Concreción en economía y salud</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--espriella)">Alta</div><div class="stat-lbl">$10B en salud con plazos definidos · Riesgo: sin fuente fiscal explícita</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">04</div><div class="stat-cat-name">Sector más robusto en propuestas</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--espriella);font-size:1.3rem">Salud y Energía</div><div class="stat-lbl">Plan de choque con montos definidos + 9 pilares energéticos</div></div>
+      </div>
+    </div>
+    <h3 class="h3-section">Estructura programática reconstruida</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏥</span>Salud (Eje prioritario)</div><ul class="sector-items"><li class="sector-item highlight">$4B nóminas y contratos atrasados</li><li class="sector-item highlight">$1.5B tratamientos crónicos y oncológicos</li><li class="sector-item highlight">$1.5B deuda proveedores + entrega domiciliaria</li><li class="sector-item highlight">$3B restaurar UPC y Presupuestos Máximos</li><li class="sector-item">Estatuto del Talento Humano en Salud</li><li class="sector-item">IA, Big Data y Blockchain para resolver glosas</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">⚡</span>Energía (9 Pilares)</div><ul class="sector-items"><li class="sector-item highlight">Decreto de Emergencia Energética en 90 días</li><li class="sector-item highlight">Ronda de exploración de hidrocarburos en 3 meses</li><li class="sector-item">Sala de Situación Diaria en Presidencia</li><li class="sector-item">Rescate de Ecopetrol de la politiquería</li><li class="sector-item">Plan Caribe: pago de deudas ($6B)</li><li class="sector-item">App 'Regalía Firme' para control ciudadano</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🔒</span>Seguridad</div><ul class="sector-items"><li class="sector-item highlight">10 cabecillas de alto valor por región en 90 días</li><li class="sector-item">Bioherbicidas contra cultivos ilícitos</li><li class="sector-item">Puestos de Mando Unificado por departamento</li><li class="sector-item">Alianzas estratégicas con EEUU e Israel</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">⚖️</span>Bloque Anticorrupción</div><ul class="sector-items"><li class="sector-item highlight">Bajo mando presidencial directo</li><li class="sector-item">UIAF+Policía+Ejército+Fiscalía+Procuraduría+Contraloría</li><li class="sector-item">Extinción de dominio acelerada a testaferros</li><li class="sector-item">Cooperación internacional para rastrear activos</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌾</span>Desarrollo Rural (5 Semillas)</div><ul class="sector-items"><li class="sector-item highlight">Mapa Nacional de Zonificación Agrícola (UPRA)</li><li class="sector-item">Programa SENA en 50 municipios &lt;30K hab.</li><li class="sector-item">CENI+Agrosavia para I+D agrícola</li><li class="sector-item">Crédito agropecuario al 8.7% con garantía 80%</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">💡</span>Economía y Emprendimiento</div><ul class="sector-items"><li class="sector-item highlight">Capitalismo popular: ciudadano-accionista real</li><li class="sector-item">Plan Colombia Exportadora</li><li class="sector-item">Hub Gamer líder de LatAm</li><li class="sector-item">Régimen especial economía digital hasta $400M/año</li></ul></div>
+    </div>
+    <div class="conclusion-box" style="border-left:4px solid var(--espriella)"><h4>Conclusión analítica</h4><p>El programa de De la Espriella presenta el mayor nivel de concreción operativa del conjunto analizado. Ofrece montos, plazos y mecanismos institucionales específicos. Su riesgo principal es la sostenibilidad fiscal: los $10+ billones en salud, el plan energético y el bloque anticorrupción no tienen fuentes de financiación explícitas. El fracking en 90 días enfrenta obstáculos legales y ambientales de alta complejidad.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ PALOMA ══════════════════════ -->
+<div class="view" id="view-paloma">
+  <div class="cand-hero"><div class="cand-hero-inner">
+    <div class="cand-badge" style="border-color:var(--paloma);color:var(--paloma)"><div class="cand-dot" style="background:var(--paloma)"></div>Centro Democrático · Derecha</div>
+    <h2>Paloma Valencia</h2>
+    <p class="cand-slogan">"Te Propongo" · Estado austero que funcione para la gente · Propuestas 2026–2030</p>
+    <div class="cand-meta"><div class="meta-item">📄 Documento breve y sintético</div><div class="meta-item">📊 Concreción general: Baja-Media</div></div>
+  </div></div>
+  <div class="cand-body">
+    <div class="overview-stats">
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">01</div><div class="stat-cat-name">Cobertura y arquitectura programática</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--paloma)">5</div><div class="stat-lbl">Pilares aspiracionales. Importantes vacíos sectoriales</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">02</div><div class="stat-cat-name">Orientación del programa</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--paloma);font-size:1.3rem">Conservador</div><div class="stat-lbl">Derecha liberal · Austeridad fiscal · Libre mercado · Seguridad con autoridad</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">03</div><div class="stat-cat-name">Concreción en economía y salud</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--paloma)">Baja</div><div class="stat-lbl">Sin montos de inversión, sin mecanismos de implementación detallados</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">04</div><div class="stat-cat-name">Sector más robusto en propuestas</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--paloma);font-size:1.2rem">Economía popular</div><div class="stat-lbl">Crédito subsidiado, formalización y pensión flexible desde la cuna</div></div>
+      </div>
+    </div>
+    <h3 class="h3-section">Los 5 pilares: análisis técnico</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">💵</span>Pilar 1: Plata en el Bolsillo</div><ul class="sector-items"><li class="sector-item highlight">Crédito popular subsidiado vs. "gota a gota"</li><li class="sector-item highlight">Ahorro pensional desde la cuna (opción pensión/vivienda)</li><li class="sector-item">Formalización sin trabas para informales</li><li class="sector-item">Reactivación de inversión privada</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🔐</span>Pilar 2: Seguridad Total (Las 4R)</div><ul class="sector-items"><li class="sector-item highlight">Reducción ingresos criminales: golpe financiero</li><li class="sector-item highlight">Robustecer FF.MM. — Plan Colombia 2.0</li><li class="sector-item">Reenamorar comunidades con sustitución de cultivos</li><li class="sector-item">Restablecer legalidad: criminales a la cárcel</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏥</span>Pilar 3: Salud para Todos</div><ul class="sector-items"><li class="sector-item highlight">Libertad de elección del asegurador</li><li class="sector-item">Hospitales padrinos para regiones apartadas</li><li class="sector-item">Mejores ingresos para médicos y enfermeras</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">❤️</span>Pilar 4: Colombia con Corazón Grande</div><ul class="sector-items"><li class="sector-item highlight">Trabajo digno y formalidad laboral</li><li class="sector-item">Educación de calidad para los más pobres</li><li class="sector-item">Oportunidades para jóvenes en tecnología</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏛️</span>Pilar 5: Estado Austero</div><ul class="sector-items"><li class="sector-item highlight">Menos burocracia, más inversión social</li><li class="sector-item">Corruptos a la cárcel + extinción de dominio</li><li class="sector-item">Estado cercano y conectado con regiones</li></ul></div>
+      <div class="sector-card" style="border-color:rgba(239,68,68,.3)"><div class="sector-card-title"><span class="sector-icon">🔴</span>Sectores Ausentes</div><ul class="sector-items"><li class="sector-item">Energía y servicios públicos</li><li class="sector-item">Ambiente y cambio climático</li><li class="sector-item">Pueblos étnicos y enfoque diferencial</li><li class="sector-item">Relaciones exteriores</li><li class="sector-item">Agua potable y saneamiento</li></ul></div>
+    </div>
+    <div class="conclusion-box" style="border-left:4px solid var(--paloma)"><h4>Conclusión analítica</h4><p>El programa de Valencia es el más breve y aspiracional. Presenta coherencia ideológica y alta comunicabilidad ciudadana. Sin embargo, carece de mecanismos de implementación, metas verificables y fuentes de financiación. Constituye más un programa de campaña que un plan de gobierno ejecutable. Tiene importantes vacíos sectoriales: energía, ambiente, etnias y política exterior están completamente ausentes.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ FAJARDO ══════════════════════ -->
+<div class="view" id="view-fajardo">
+  <div class="cand-hero"><div class="cand-hero-inner">
+    <div class="cand-badge" style="border-color:var(--fajardo);color:var(--fajardo)"><div class="cand-dot" style="background:var(--fajardo)"></div>Centro independiente · Cambio. Serio. Seguro.</div>
+    <h2>Sergio Fajardo Valderrama</h2>
+    <p class="cand-slogan">"Cambio. Serio. Seguro." · Crisis · Esperanza · Dignidad · Síntesis Programa 2026–2030</p>
+    <div class="cand-meta"><div class="meta-item">📄 Síntesis sectorial completa (62 págs.)</div><div class="meta-item">🎯 3 capítulos: Crisis · Esperanza · Dignidad</div><div class="meta-item">📊 Concreción general: Alta · Mayor cobertura</div></div>
+  </div></div>
+  <div class="cand-body">
+    <div class="overview-stats">
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">01</div><div class="stat-cat-name">Cobertura y arquitectura programática</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--fajardo)">20+</div><div class="stat-lbl">Sectores de política pública cubiertos integralmente en 3 capítulos</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">02</div><div class="stat-cat-name">Orientación del programa</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--fajardo);font-size:1.2rem">Tecnocrático reformista</div><div class="stat-lbl">Centro · Institucionalista · Basado en evidencia · Sin extremos ideológicos</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">03</div><div class="stat-cat-name">Concreción en economía y salud</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--fajardo)">Alta</div><div class="stat-lbl">USD 1B coinversión · Metas de empleo · Reforma técnica del sistema de salud</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">04</div><div class="stat-cat-name">Sector más robusto en propuestas</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--fajardo);font-size:1.2rem">Educación y CTI</div><div class="stat-lbl">STEAM · matemáticas nacional · SENA+150K · Instituto IA · Colombia Hub</div></div>
+      </div>
+    </div>
+    <h3 class="h3-section">Capítulo I — Crisis: Recuperación Segura</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🔒</span>Seguridad · Plan Guardián</div><ul class="sector-items"><li class="sector-item highlight">+40.000 policías profesionales en el cuatrienio</li><li class="sector-item highlight">Duplicar grupos GAULA</li><li class="sector-item highlight">5 nuevas cárceles</li><li class="sector-item">Planes integrales en Catatumbo, Cauca, Chocó</li><li class="sector-item">Atacar rentas criminales en 100 días</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏥</span>Salud · Nuevo Orden del Sistema</div><ul class="sector-items"><li class="sector-item highlight">Puesto de Mando Presidencial (100 días)</li><li class="sector-item highlight">Auditorías EPS + recálculo técnico UPC</li><li class="sector-item highlight">Estrategia Nacional de Salud Mental</li><li class="sector-item">Acuerdo de punto final con hospitales</li><li class="sector-item">Salud Digital: telemedicina e interoperabilidad</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">📊</span>Finanzas Públicas · Regla Fiscal</div><ul class="sector-items"><li class="sector-item highlight">Plan de consolidación fiscal con multilaterales</li><li class="sector-item highlight">Ajuste subsidios FEPC: hasta 2% del PIB</li><li class="sector-item">DIAN moderna, despolitizada e intensiva en datos</li><li class="sector-item">Presupuesto por programas abierto al ciudadano</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">⚡</span>Energía · Transición Sin Improvisación</div><ul class="sector-items"><li class="sector-item highlight">+1.000 MW nuevos de capacidad energética por año</li><li class="sector-item highlight">300.000 hogares rurales conectados</li><li class="sector-item highlight">Reducción tarifas 10-15% hacia 2030</li><li class="sector-item">Destrabar 2.000 MW eólicos y solares en La Guajira</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">⚖️</span>Anticorrupción · Cero Impunidad</div><ul class="sector-items"><li class="sector-item highlight">Secretaría de Transparencia → Agencia Anticorrupción</li><li class="sector-item">Tablero de Transparencia periódico</li><li class="sector-item">30 proyectos de inversión con control especial</li><li class="sector-item">Ley del lobby + protección a denunciantes</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌍</span>Política Exterior</div><ul class="sector-items"><li class="sector-item highlight">Relación sólida con EEUU, UE y China</li><li class="sector-item">Venezuela: pragmatismo democrático sin complicidad</li><li class="sector-item">Consulado digital 24/7 para diáspora</li></ul></div>
+    </div>
+    <h3 class="h3-section">Capítulo II — Esperanza · Capítulo III — Dignidad</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🎓</span>Educación · Puerta de la Esperanza</div><ul class="sector-items"><li class="sector-item highlight">Matemáticas como proyecto nacional estratégico</li><li class="sector-item highlight">STEAM en currículo escolar</li><li class="sector-item highlight">SENA ampliado en al menos 150.000 estudiantes</li><li class="sector-item">Icetex con créditos contingentes al ingreso</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🔬</span>Ciencia, Tecnología e Innovación</div><ul class="sector-items"><li class="sector-item highlight">Instituto Nacional de IA y Ciencia de Datos</li><li class="sector-item highlight">Colombia Hub regional de tecnología e IA</li><li class="sector-item">Agenda Nacional de Bioeconomía y Biotecnología</li><li class="sector-item">Estado Digital 2030: servicios interoperables</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌾</span>Agricultura y Rural</div><ul class="sector-items"><li class="sector-item highlight">PDPA: 50% de pequeños productores en cadenas modernas</li><li class="sector-item highlight">Catastro multipropósito nacional</li><li class="sector-item">Altillanura como nuevo polo agroproductivo</li><li class="sector-item">Modernización integral de la caficultura</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🤝</span>Inclusión Social</div><ul class="sector-items"><li class="sector-item highlight">Registro Universal de Ingresos (RUI)</li><li class="sector-item highlight">Ingreso Mínimo Garantizado para pobreza extrema</li><li class="sector-item">Reforma pensional sostenible basada en pilares</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏠</span>Vivienda y Ciudades</div><ul class="sector-items"><li class="sector-item highlight">1 millón de soluciones habitacionales</li><li class="sector-item">750.000 VIS/VIP + 250.000 mejoramientos</li><li class="sector-item">Agua potable para 1M colombianos adicionales</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">👥</span>Poblaciones · Riqueza Multicultural</div><ul class="sector-items"><li class="sector-item highlight">400 Parques Educativos multipropósito</li><li class="sector-item">Plan Chocó para comunidades NARP</li><li class="sector-item">SISPI indígena al 50% de cobertura en 4 años</li><li class="sector-item">Política LGBTIQ+ con presupuesto garantizado</li></ul></div>
+    </div>
+    <div class="conclusion-box" style="border-left:4px solid var(--fajardo)"><h4>Conclusión analítica</h4><p>El programa de Fajardo es el más completo y sistemático del conjunto. Su estructura articula coherentemente la urgencia con la visión de largo plazo. Presenta alta concreción en sectores clave con metas cuantificables. Es el único que aborda todos los sectores de política pública relevantes. Su riesgo central es la tensión entre la ambiciosa agenda social y la disciplina fiscal propuesta. La orientación tecnocrática de centro es coherente con su trayectoria de gobierno en Medellín y Antioquia.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ CLAUDIA LÓPEZ ══════════════════════ -->
+<div class="view" id="view-claudia">
+  <div class="cand-hero"><div class="cand-hero-inner">
+    <div class="cand-badge" style="border-color:var(--claudia);color:var(--claudia)"><div class="cand-dot" style="background:var(--claudia)"></div>Alianza Verde · Centro-izquierda</div>
+    <h2>Claudia López Hernández</h2>
+    <p class="cand-slogan">"Por una Colombia Justa, un Gobierno de Soluciones" · Tres acuerdos estratégicos · Programa 2026–2030</p>
+    <div class="cand-meta"><div class="meta-item">📄 35 páginas</div><div class="meta-item">🎯 3 acuerdos: Seguridad/Gobernabilidad · Igualdad/Justicia · Desarrollo Regional</div><div class="meta-item">📊 Concreción general: Media-Alta</div></div>
+  </div></div>
+  <div class="cand-body">
+    <div class="overview-stats">
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">01</div><div class="stat-cat-name">Cobertura y arquitectura programática</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--claudia)">3</div><div class="stat-lbl">Acuerdos estratégicos articulados en seguridad, igualdad y desarrollo regional</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">02</div><div class="stat-cat-name">Orientación del programa</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--claudia);font-size:1.2rem">Institucionalista descentralizadora</div><div class="stat-lbl">Centro-izquierda · Descentralización fiscal · Estado de derecho · Igualdad de oportunidades</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">03</div><div class="stat-cat-name">Concreción en economía y salud</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--claudia)">Media</div><div class="stat-lbl">Sistema Mixto e Integral de Salud · Economía sin montos específicos de inversión</div></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-header"><div class="stat-cat-num">04</div><div class="stat-cat-name">Sector más robusto en propuestas</div></div>
+        <div class="stat-body"><div class="stat-val" style="color:var(--claudia);font-size:1.2rem">Seguridad y Desarrollo Regional</div><div class="stat-lbl">Fiscalía Antimafia + justicia en 3 niveles + DPR descentralizados en territorios</div></div>
+      </div>
+    </div>
+
+    <h3 class="h3-section">Acuerdo 1 — Seguridad y Gobernabilidad Territorial</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🔒</span>Seguridad · Justicia en 3 Niveles</div><ul class="sector-items"><li class="sector-item highlight">Fiscalía Antimafia dedicada a crimen organizado, narco y corrupción</li><li class="sector-item highlight">Justicia ordinaria contra delincuencia común con máxima sanción a la reincidencia</li><li class="sector-item highlight">Justicia restaurativa coordinada con alcaldías</li><li class="sector-item">Sometimiento de los 13 grupos armados activos en Colombia</li><li class="sector-item">Rechazo a "Paz Total" como política de Estado frente a organizaciones criminales</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">⚖️</span>Anticorrupción e Institucionalidad</div><ul class="sector-items"><li class="sector-item highlight">Capital ilegal incautado reinvertido directamente en las regiones</li><li class="sector-item highlight">Transformar la Procuraduría en apoyo efectivo a la Fiscalía</li><li class="sector-item">Régimen legal especial para cárceles de crimen organizado</li><li class="sector-item">Finanzas públicas responsables: no endeudarse sin razón</li><li class="sector-item">Cero robo para ganar ni para gobernar: 5 mandatos de gobierno</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏛️</span>Reforma del Estado</div><ul class="sector-items"><li class="sector-item highlight">Ministerio de Justicia y Seguridad Ciudadana reestructurado</li><li class="sector-item">Reforma penitenciaria integral: INPEC → Gendarmería</li><li class="sector-item">Fortalecer capacidades operativas de FF.MM. y Policía</li><li class="sector-item">Cooperación con OTAN y OTCA para crimen transnacional</li></ul></div>
+    </div>
+
+    <h3 class="h3-section">Acuerdo 2 — Igualdad y Justicia Social</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏥</span>Salud · Sistema Mixto e Integral</div><ul class="sector-items"><li class="sector-item highlight">Sistema Mixto e Integral de Salud que articule salud, cuidado y salud mental</li><li class="sector-item highlight">Nuevo estudio actuarial para planes de beneficios explícitos y equitativos</li><li class="sector-item">Tablas de precios unificadas por servicios, regiones y poblaciones</li><li class="sector-item">Mecanismos de pago contra auditoría con tecnología transparente</li><li class="sector-item">Salud mental y discapacidad como prioridades de atención</li><li class="sector-item">Cuidado institucionalizado desde primera infancia hasta vejez</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🎓</span>Educación · Acuerdo Nacional</div><ul class="sector-items"><li class="sector-item highlight">Gran Acuerdo Nacional por la Educación con todos los sectores</li><li class="sector-item">Educación conectada con el trabajo y la productividad regional</li><li class="sector-item">Formación para el trabajo en sectores de alta demanda regional</li><li class="sector-item">Cuidado institucionalizado como palanca de inclusión educativa</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">💼</span>Trabajo y Economía Popular</div><ul class="sector-items"><li class="sector-item highlight">Impulsar empleabilidad de mujeres, jóvenes y mayores de 50 años</li><li class="sector-item">Clústeres y cadenas productivas con alto potencial exportador</li><li class="sector-item">Incentivos al empleo y apoyo a micronegocios</li><li class="sector-item">Pasar de micronegocios de autoempleo a empresas con empleo formal</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🏠</span>Vivienda y Hábitat</div><ul class="sector-items"><li class="sector-item highlight">Garantizar acceso a vivienda digna con equidad territorial</li><li class="sector-item">Servicios públicos y vivienda como derechos fundamentales garantizados</li><li class="sector-item">Urbanismo incluyente con enfoque de género y territorial</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">👩</span>Género y Cuidado</div><ul class="sector-items"><li class="sector-item highlight">Cuidado institucionalizado y pagado: no más trabajo gratuito de mujeres</li><li class="sector-item">Sistema público de cuidado para niños, mayores y personas con discapacidad</li><li class="sector-item">Mujeres liberadas del cuidado exclusivo para que estudien y trabajen</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🎭</span>Cultura, Deporte y Patrimonio</div><ul class="sector-items"><li class="sector-item">Cultura viva en los territorios: Fondo Regional de Estímulos</li><li class="sector-item">Sistema Regional de Patrimonios y museos vivos</li><li class="sector-item">Deporte, salud y bienestar articulados a salud pública</li><li class="sector-item">Juegos Regionales de la Identidad</li></ul></div>
+    </div>
+
+    <h3 class="h3-section">Acuerdo 3 — Desarrollo Regional Sostenible y Sin Corrupción</h3>
+    <div class="sector-grid">
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🗺️</span>Descentralización · DPR Territoriales</div><ul class="sector-items"><li class="sector-item highlight">Delegados Presidenciales Regionales (DPR) en los territorios, no en Bogotá</li><li class="sector-item highlight">Presupuestos participativos regionales: la gente vota qué proyectos se ejecutan</li><li class="sector-item highlight">Fin del centralismo y la intermediación política de congresistas en SGP</li><li class="sector-item">La Presidencia irá a las regiones, no al revés</li><li class="sector-item">Autonomía económica y fiscal para cada región como protagonista del desarrollo</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌱</span>Energía y Transición</div><ul class="sector-items"><li class="sector-item highlight">Energía barata y sin apagones como condición del desarrollo productivo</li><li class="sector-item">Servicios públicos de calidad para toda la población</li><li class="sector-item">Descentralización de la inversión energética hacia regiones</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🌿</span>Ambiente y Biodiversidad</div><ul class="sector-items"><li class="sector-item highlight">Biodiversidad como activo estratégico nacional y de política exterior</li><li class="sector-item">Colombia soberana sobre su territorio y sus recursos naturales</li><li class="sector-item">Desarrollo sostenible compatible con autoridad del Estado</li></ul></div>
+      <div class="sector-card"><div class="sector-card-title"><span class="sector-icon">🛣️</span>Infraestructura Regional</div><ul class="sector-items"><li class="sector-item">Proyectos de inversión estructurados directamente en los territorios</li><li class="sector-item">Portafolio regional en prefactibilidad y estructuración permanente</li><li class="sector-item">Fin de la corrupción en la contratación de infraestructura regional</li></ul></div>
+    </div>
+
+    <div class="conclusion-box" style="border-left:4px solid var(--claudia)"><h4>Conclusión analítica</h4><p>El programa de Claudia López se distingue por dos propuestas diferenciales de alta concreción: la Fiscalía Antimafia con justicia especializada en tres niveles (la propuesta de seguridad más articulada del grupo) y la descentralización fiscal radical con DPR territoriales y presupuestos participativos (la propuesta regional más específica del conjunto). Su orientación es institucionalista reformista, con rechazo explícito a la Paz Total y al centralismo. Su riesgo principal es que la descentralización radical propuesta requiere reformas constitucionales no desarrolladas en el programa, y la mayoría de sectores carecen de montos de inversión. El Sistema Mixto e Integral de Salud tiene coherencia conceptual pero sin cifras de implementación. Es el programa con la apuesta más clara por el orden institucional del Estado como condición previa a la justicia social.</p></div>
+  </div>
+</div>
+
+  </div>
+<footer><div class="footer-inner"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMTAgODAiIHdpZHRoPSIzMTAiIGhlaWdodD0iODAiPgogIDwhLS0gRWRlbG1hbiBicmFuZG1hcms6IDQgdHJpYW5nbGVzIChjb21wYXNzIHNoYXBlKSwgd2hpdGUgc2luZ2xlLWNvbG9yIHZlcnNpb24gLS0+CiAgPCEtLSBUb3AtcmlnaHQgdHJpYW5nbGU6IHBvaW50cyByaWdodCAtLT4KICA8cG9seWdvbiBwb2ludHM9IjMwLDYgNTgsMzQgMzAsMzQiIGZpbGw9IndoaXRlIi8+CiAgPCEtLSBCb3R0b20tcmlnaHQgdHJpYW5nbGU6IHBvaW50cyBkb3duIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iMzAsMzQgNTgsMzQgMzAsNjIiIGZpbGw9IndoaXRlIi8+CiAgPCEtLSBCb3R0b20tbGVmdCB0cmlhbmdsZTogcG9pbnRzIGxlZnQgLS0+CiAgPHBvbHlnb24gcG9pbnRzPSIyLDM0IDMwLDYyIDMwLDM0IiBmaWxsPSJ3aGl0ZSIvPgogIDwhLS0gVG9wLWxlZnQgcXVhZHJhbnQ6IHRyYW5zcGFyZW50IChzYW1lIGFzIGRhcmsgYmcgPSBpbnZpc2libGUsIGdhcCBzaG93cykgLS0+CiAgPCEtLSBEaXZpZGluZyBsaW5lcyAoRGFyayBCbHVlID0gc2FtZSBhcyBiZywgY3JlYXRlcyB0aGUgZ2FwcykgLS0+CiAgPGxpbmUgeDE9IjMwIiB5MT0iNiIgeDI9IjMwIiB5Mj0iNjIiIHN0cm9rZT0iIzA0MDA0RSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPGxpbmUgeDE9IjIiIHkxPSIzNCIgeDI9IjU4IiB5Mj0iMzQiIHN0cm9rZT0iIzA0MDA0RSIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPCEtLSBXb3JkbWFyazogIkVkZWxtYW4iIGluIHdoaXRlLCBib2xkIC0tPgogIDx0ZXh0IHg9IjcyIiB5PSI1MiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iMzQiIGZvbnQtd2VpZ2h0PSI5MDAiIGxldHRlci1zcGFjaW5nPSItMSIgZmlsbD0id2hpdGUiPkVkZWxtYW48L3RleHQ+Cjwvc3ZnPg==" class="footer-logo-img" alt="Edelman"><span class="footer-sep"></span><span class="footer-copy">Análisis Programático · Elecciones Presidenciales Colombia 2026 · Consultoría en Asuntos Públicos y Gobierno · Documento Técnico</span></div></footer>
+
+<script>
+  // NAV
+  document.querySelectorAll('.nav-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+  function switchTab(id) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // PILLAR TABS
+  document.querySelectorAll('.pillar-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const p = tab.dataset.pillar;
+      document.querySelectorAll('.pillar-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.pillar-content').forEach(c => c.classList.toggle('active', c.dataset.pillar === p));
+    });
+  });
+</script>
+</body>
+</html>
